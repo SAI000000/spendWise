@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "805970283049",
+    "firebase_url": "https://spendwise-9f02b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "spendwise-9f02b",
+    "storage_bucket": "spendwise-9f02b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805970283049:android:ec5dd3fce8657bf474aa38",
+        "android_client_info": {
+          "package_name": "com.example.spendwise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZaw_WqyNg28Kir4yDw0hwwIPJ2BjGx74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

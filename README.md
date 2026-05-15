@@ -1,17 +1,13 @@
-# spendwise
+# 💰 SpendWise - Firebase Expense Tracker
 
-A new Flutter project.
+A modern personal finance app built with **Flutter** and **Firebase Cloud Firestore**.
 
-## Getting Started
+## 🏗️ Architecture
+- **Multi-page Navigation:** Onboarding, Auth, Dashboard, and Profile.
+- **Clean Structure:** Separated into `models`, `screens`, and `services`.
+- **Cloud Integration:** Real-time data syncing using Firestore StreamBuilder.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Features
+- **Live Sync:** Changes in the cloud reflect instantly in the UI.
+- **Persistent Storage:** Data is saved securely in the Google Cloud.
+- **Dynamic Dashboard:** Balance updates automatically as expenses are added.
