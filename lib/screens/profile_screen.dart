@@ -50,11 +50,16 @@ class ProfileScreen extends StatelessWidget {
           ),
           const Spacer(),
           TextButton.icon(
-            onPressed: () => Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/login',
-              (route) => false,
-            ),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut(); // Wipes login token
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              }
+            },
             icon: const Icon(Icons.logout, color: Colors.red),
             label: const Text(
               "Log Out",

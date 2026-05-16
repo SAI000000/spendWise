@@ -47,8 +47,16 @@ class OnboardingScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/login'),
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool(
+                      'showOnboarding',
+                      false,
+                    ); // Save preference permanently
+                    if (context.mounted) {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    }
+                  },
                   child: const Text(
                     "Get Started",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
