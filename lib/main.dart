@@ -11,29 +11,15 @@ import 'screens/register_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/profile_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // 1. Check local storage if onboarding was completed
-  final prefs = await SharedPreferences.getInstance();
-  final bool showOnboarding = prefs.getBool('showOnboarding') ?? true;
-
-  // 2. Check if a user is already authenticated in Firebase
-  final User? user = FirebaseAuth.instance.currentUser;
-
-  // 3. Determine the initial landing page
-  String initialRoute = '/';
-  if (!showOnboarding) {
-    initialRoute = (user != null) ? '/home' : '/login';
-  }
-
-  runApp(SpendWiseApp(initialRoute: initialRoute));
+  runApp(const SpendWiseApp());
 }
 
 class SpendWiseApp extends StatelessWidget {
-  final String initialRoute;
-  const SpendWiseApp({super.key, required this.initialRoute});
+  const SpendWiseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +31,61 @@ class SpendWiseApp extends StatelessWidget {
         textTheme: GoogleFonts.interTextTheme(),
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),
       ),
-      initialRoute: initialRoute,
       routes: {
         '/': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const MainDashboard(),
         '/profile': (context) => const ProfileScreen(),
+      },
+      home: const _AuthGate(),
+    );
+  }
+}
+
+class _AuthGate extends StatelessWidget {
+  const _AuthGate();
+
+  Future<bool> _getShowOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('showOnboarding') ?? true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _getShowOnboarding(),
+      builder: (context, onboardingSnapshot) {
+        if (!onboardingSnapshot.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final showOnboarding = onboardingSnapshot.data!;
+
+        return StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, authSnapshot) {
+            // While Firebase resolves/restores auth state, keep UI stable.
+            if (authSnapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            final user = authSnapshot.data;
+
+            if (user == null) {
+              if (showOnboarding) {
+                return const OnboardingScreen();
+              }
+              return const LoginScreen();
+            }
+
+            return const MainDashboard();
+          },
+        );
       },
     );
   }

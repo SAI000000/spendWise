@@ -14,6 +14,10 @@ class _MainDashboardState extends State<MainDashboard> {
   // Instantiate our new service
   final DatabaseService _db = DatabaseService();
 
+  void _goToProfile() {
+    Navigator.pushNamed(context, '/profile');
+  }
+
   void _showAddTransactionModal() {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController amountController = TextEditingController();
@@ -55,6 +59,8 @@ class _MainDashboardState extends State<MainDashboard> {
                   timestamp: DateTime.now(),
                 );
                 await _db.addTransaction(tx);
+
+                if (!context.mounted) return;
                 Navigator.pop(context);
               },
               child: const Text("Save to Cloud"),
@@ -69,12 +75,23 @@ class _MainDashboardState extends State<MainDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("SpendWise")),
+      appBar: AppBar(
+        title: const Text("SpendWise"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: _goToProfile,
+            tooltip: 'Profile',
+          ),
+        ],
+      ),
       body: StreamBuilder<List<TransactionModel>>(
         stream: _db.transactions, // Listening to our live stream
+
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
 
           final txs = snapshot.data!;
           return ListView.builder(

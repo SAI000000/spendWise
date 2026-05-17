@@ -16,6 +16,9 @@ class DatabaseService {
       data['userId'] = _currentUserId; // Force association with this account
       await _transactionCollection.add(data);
     } catch (e) {
+      // ignore: avoid_print
+      // (Replace with logging if desired)
+      // ignore: avoid_print
       print("Error adding transaction: $e");
     }
   }
